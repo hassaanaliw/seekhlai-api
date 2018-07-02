@@ -1,0 +1,5 @@
+{
+  "port": 4410,
+  "database_url": "sqlite:///tmp/quotes.db",
+  "debug": true
+}
