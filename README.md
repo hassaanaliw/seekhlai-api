@@ -1,5 +1,7 @@
 # Seekh Lai API
 
+[![Build Status](https://travis-ci.com/hassaanaliw/seekhlai-api.svg?branch=master)](https://travis-ci.com/hassaanaliw/seekhlai-api)
+
 An API for the Rektha.org Word of the Day function in GoLang. 
 
 It is the API behind the Seekh Lai Chrome Extension I'm developing as a personal language learning project.

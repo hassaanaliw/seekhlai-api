@@ -12,6 +12,6 @@ format:
 	golangci-lint run
 	go fmt .
 	go fmt ./model/
-	go fmt ./route/
+	go fmt ./api/
 	go fmt ./config/
 	go fmt ./test/

@@ -1,11 +1,11 @@
 package api
 
 import (
-	"github.com/gorilla/mux"
-	"net/http"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"github.com/hassaanaliw/seekhlai-api/scraper"
+	"net/http"
 	"time"
 )
 
@@ -21,7 +21,6 @@ func GetWordToday(w http.ResponseWriter, r *http.Request) {
 	word := scraper.ScrapeTodayWord(time.Now())
 	ServeJson(&w, r, word)
 }
-
 
 // URL: http://localhost:PORT/api/v1/word/today
 // Returns the JSON of the Word of the Day from Rekhta
