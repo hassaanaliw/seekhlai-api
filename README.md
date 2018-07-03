@@ -15,6 +15,8 @@ First install the package
 go get github.com/hassaanaliw/seekhlai-api
 ```
 
+You can either use this as a package for your own web application in Go
+
 ```go
 
 package main
@@ -25,9 +27,41 @@ import (
 )
 
 func main() {
-  # To fetch the word for any other day, pass the time object for that date
-	scraper.ScrapeTodayWord(time.Now())
+    # To fetch the word for any other day, pass the time object for that date
+	word := scraper.ScrapeTodayWord(time.Now())
+	fmt.Print(word.WordRomanUrdu)
+
 }
+
+```
+
+Or run it as a server, served over HTTP localhost on the port specified in config-[dev/prod].json
+
+``` bash
+
+❱❱❱ make format
+                                                                                                                                                           130 ⏎  +1645 16:25 ❰─┘
+golangci-lint run
+Congrats! No issues were found.
+go fmt .
+go fmt ./model/
+go fmt ./api/
+go fmt ./config/
+go fmt ./test/
+
+❱❱❱ make run                                                                                                                                                                        +1668 16:25 ❰─┘
+go run main.go
++---------------------+----------------------------+
+|    Config Variables |               Config Value |
++=====================+============================+
+|               Debug |                       true |
++---------------------+----------------------------+
+|        Database URL |    sqlite:///tmp/quotes.db |
++---------------------+----------------------------+
+|                Port |                       4410 |
++---------------------+----------------------------+
+
+Serving web app on url: http://localhost:4410
 
 ```
 
