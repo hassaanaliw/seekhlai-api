@@ -66,6 +66,9 @@ func ExtractVerseAndTranslation(doc soup.Root, number int) []string {
 	}
 
 	translationDiv := doc.Find("div", "class", "t")
+	if (translationDiv.Pointer == nil) {
+		return []string{verseText, " "}
+	}
 	translationParagraph := translationDiv.FindAll("p")[number-1]
 
 	// Iterate over all the paragraph spans and join their text together to form the translations

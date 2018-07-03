@@ -29,7 +29,7 @@ import (
 func main() {
     # To fetch the word for any other day, pass the time object for that date
 	word := scraper.ScrapeTodayWord(time.Now())
-	fmt.Print(word.WordRomanUrdu)
+	fmt.P   rint(word.WordRomanUrdu)
 
 }
 
