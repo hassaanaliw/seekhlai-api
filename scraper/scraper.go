@@ -26,7 +26,8 @@ func ScrapeTodayWord(date time.Time) model.Word {
 	resp, err := soup.Get(fmt.Sprintf(baseURL, currentDate))
 
 	if err != nil {
-		os.Exit(1)
+		fmt.Println(err)
+        os.Exit(1)
 	}
 
 	doc := soup.HTMLParse(resp)
@@ -67,7 +68,9 @@ func ExtractVerseAndTranslation(doc soup.Root, number int) []string {
 
 	translationDiv := doc.Find("div", "class", "t")
 	if (translationDiv.Pointer == nil) {
-		return []string{verseText, " "}
+		// Some days, the rekhta page does not include a translation for the verses
+        // Return empty string in that case
+        return []string{verseText, " "}
 	}
 	translationParagraph := translationDiv.FindAll("p")[number-1]
 
