@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -23,8 +24,17 @@ func TestScrape(t *testing.T) {
 	assert.Equal(t, wordJSON.SecondMisra, "ik  jaan  kā  ziyāñ  hai  so  aisā  ziyāñ  nahīñ  ")
 	assert.Equal(t, wordJSON.FirstMisraTranslation, " ")
 	assert.Equal(t, wordJSON.SecondMisraTranslation, " ")
-	assert.Equal(t, wordJSON.GhazalName, "")
-	assert.Equal(t, wordJSON.GhazalNameLink, "")
+	assert.Equal(t, wordJSON.GhazalName, " ")
+	assert.Equal(t, wordJSON.GhazalNameLink, " ")
 	assert.Equal(t, wordJSON.GhazalAuthorLink, "https://rekhta.org/poets/mufti-sadruddin-aazurda")
 	assert.Equal(t, wordJSON.GhazalAuthor, "Mufti Sadruddin Aazurda")
+
+}
+
+func TestScrapeToday(t *testing.T) {
+	testDate := time.Now()
+	// Fetch the JSON for a date for which we know what the JSON response should be
+	word := scraper.ScrapeTodayWord(testDate)
+	fmt.Println(word)
+
 }

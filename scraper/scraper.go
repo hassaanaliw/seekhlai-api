@@ -2,9 +2,10 @@ package scraper
 
 import (
 	"fmt"
-	"time"
-	"github.com/anaskhan96/soup"
 	"os"
+	"time"
+
+	"github.com/anaskhan96/soup"
 	"github.com/hassaanaliw/seekhlai-api/model"
 )
 
@@ -27,7 +28,7 @@ func ScrapeTodayWord(date time.Time) model.Word {
 
 	if err != nil {
 		fmt.Println(err)
-        os.Exit(1)
+		os.Exit(1)
 	}
 
 	doc := soup.HTMLParse(resp)
@@ -35,9 +36,8 @@ func ScrapeTodayWord(date time.Time) model.Word {
 	word.WordRomanUrdu = doc.Find("div", "class", "wordContainer").Find("h1").Text()
 	word.WordNastaliqUrdu = doc.Find("li", "class", "urMeaning").Text()
 	word.WordMeaning = doc.Find("div", "class", "engMeaning").Find("h3").Text()
-	word.GhazalAuthor = doc.Find("div", "class", "sherDetail").Find("a").Text()
-	word.GhazalAuthorLink = "https://rekhta.org" +
-		doc.Find("div", "class", "sherDetail").Find("a").Attrs()["href"]
+
+	ExtractGhazalAuthorAndName(doc, &word)
 
 	verseOne := ExtractVerseAndTranslation(doc, 1)
 	word.FirstMisra = verseOne[0]
@@ -51,7 +51,7 @@ func ScrapeTodayWord(date time.Time) model.Word {
 
 }
 
-// Given a Root document and the number of the verse to extract, returns
+// ExtractVerseAndTranslation , given a Root document and the number of the verse to extract, returns
 // a slice of the verse and it's translation
 func ExtractVerseAndTranslation(doc soup.Root, number int) []string {
 	parentDiv := doc.Find("div", "class", "c")
@@ -67,10 +67,10 @@ func ExtractVerseAndTranslation(doc soup.Root, number int) []string {
 	}
 
 	translationDiv := doc.Find("div", "class", "t")
-	if (translationDiv.Pointer == nil) {
+	if translationDiv.Pointer == nil {
 		// Some days, the rekhta page does not include a translation for the verses
-        // Return empty string in that case
-        return []string{verseText, " "}
+		// Return empty string in that case
+		return []string{verseText, " "}
 	}
 	translationParagraph := translationDiv.FindAll("p")[number-1]
 
@@ -83,4 +83,27 @@ func ExtractVerseAndTranslation(doc soup.Root, number int) []string {
 	}
 
 	return []string{verseText, translationText}
+}
+
+// ExtractGhazalAuthorAndName given a doc and a word, extracts either both the author and ghazal
+// details or just the author info based on what the Rekhta page contains and adds these to the
+// word object. It returns a reference to the word.
+func ExtractGhazalAuthorAndName(doc soup.Root, word *model.Word) *model.Word {
+	mainDivLinks := doc.Find("div", "class", "sherDetail").FindAll("a")
+	if len(mainDivLinks) > 1 {
+        // If only one link is returned, this means that Rekhta only provided the Author 
+        // information for that ghazal, not a link to the ghazal itself. 
+        word.GhazalName = mainDivLinks[0].Text()
+		word.GhazalNameLink = "https://rekhta.org" + mainDivLinks[0].Attrs()["href"]
+		word.GhazalAuthor = mainDivLinks[1].Text()
+		word.GhazalAuthorLink = "https://rekhta.org" + mainDivLinks[1].Attrs()["href"]
+	} else {
+		word.GhazalAuthor = mainDivLinks[0].Text()
+		word.GhazalAuthorLink = "https://rekhta.org" + mainDivLinks[0].Attrs()["href"]
+		word.GhazalName = " "
+		word.GhazalNameLink = " "
+	}
+
+	return word
+
 }
